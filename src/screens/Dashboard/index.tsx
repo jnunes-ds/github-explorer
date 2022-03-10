@@ -63,6 +63,7 @@ export function Dashboard() {
                * onChangeText={YOUR CODE HERE}
                */
               onSubmitEditing={handleAddRepository}
+              onChangeText={setInputText}
               returnKeyType="send"
               autoCapitalize='none'
               autoCorrect={false}
