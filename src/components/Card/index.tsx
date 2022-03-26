@@ -1,10 +1,11 @@
-import React, { useRef } from 'react';
+import React, { useCallback, useRef } from 'react';
 import { Alert } from 'react-native';
 import { Swipeable } from 'react-native-gesture-handler';
 import { Dashboard } from '~/screens/Dashboard';
 
 import { useRepositories } from '../../hooks/useRepositories';
 import { CardAnimation } from './CardAnimation';
+import { useNavigation } from '@react-navigation/core';
 
 import {
   SwipeableContainer,
@@ -32,11 +33,12 @@ interface Props {
 
 export function Card({ data, onPress }: Props) {
   const swipeableRef = useRef<Swipeable>(null);
+	const { navigate } = useNavigation();
 
   const { removeRepository } = useRepositories();
 
 
-  function handleDeleteAlert() {
+  const handleDeleteAlert = useCallback(() => {
     Alert.alert(
       "Remover item",
       "Você tem certeza que deseja remover esse repositório da lista?",
@@ -49,13 +51,17 @@ export function Card({ data, onPress }: Props) {
         { text: "Sim", onPress: () => removeRepository(data.id) }
       ]
     );
-  }
+  }, [swipeableRef, removeRepository])
+
+	const handleGoToRepositoryScreen = useCallback(() => {
+		navigate('Repository', { repositoryId: data.id })
+	}, []);
 
   function CardContent() {
     return (
       <CardContainer
         hasImage={!!data.imageUrl}
-        onPress={onPress}
+        onPress={handleGoToRepositoryScreen}
       >
         <Info>
           {data.imageUrl && (
@@ -83,7 +89,7 @@ export function Card({ data, onPress }: Props) {
 
   if (data.imageUrl) {
     return (
-      <CardAnimation  testID="repository-card">
+      <CardAnimation testID="repository-card">
         <SwipeableContainer
           ref={swipeableRef}
           rightThreshold={42}
