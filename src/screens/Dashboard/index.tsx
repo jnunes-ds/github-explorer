@@ -1,4 +1,5 @@
 import { useNavigation } from '@react-navigation/core';
+import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 import { TextInput } from 'react-native';
 
@@ -7,6 +8,7 @@ import { Card } from '../../components/Card';
 
 import { useRepositories } from '../../hooks/useRepositories';
 import { RepositoriesService } from '../../services/repositories.service';
+import { IRepositorieProps } from '~/Models/repositories-service.model';
 
 import {
   Container,
@@ -48,7 +50,24 @@ export function Dashboard() {
   }
 
   useEffect(() => {
-    RepositoriesService.signIn({login: 'dendenf@hotmail.com', password: '130290'})
+		const printRepository = async () => {
+			try {
+				const newRequest: IRepositorieProps = {
+					owner: 'facebook',
+					repo: 'react',
+				}
+				const response = await RepositoriesService.getRepositorie(newRequest);
+				if (response) {
+					console.log(':::::DATA:::::', response.data.owner.avatar_url);
+				}
+			} catch (error) {
+				if (axios.isAxiosError(error)) {
+					console.error(error.response?.data);
+				}
+				console.error(error);
+			}
+		}
+		printRepository();
   }, []);
 
   return (
