@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import { Alert } from 'react-native';
 import { Swipeable } from 'react-native-gesture-handler';
+import { Dashboard } from '~/screens/Dashboard';
 
 import { useRepositories } from '../../hooks/useRepositories';
 import { CardAnimation } from './CardAnimation';
@@ -19,19 +20,21 @@ import {
 } from './styles';
 
 interface CardProps {
-  data: {
-    id: number;
-    title: string;
-    subTitle: string;
-    imageUrl?: string;
-  },
-  onPress: () => void;
+	id: number;
+	title: string;
+	subTitle: string;
+	imageUrl?: string;
+}
+interface Props {
+  data: CardProps;
+  onPress(): void;
 }
 
-export function Card({ data, onPress }: CardProps) {
+export function Card({ data, onPress }: Props) {
   const swipeableRef = useRef<Swipeable>(null);
 
   const { removeRepository } = useRepositories();
+
 
   function handleDeleteAlert() {
     Alert.alert(
@@ -80,7 +83,7 @@ export function Card({ data, onPress }: CardProps) {
 
   if (data.imageUrl) {
     return (
-      <CardAnimation testID="repository-card">
+      <CardAnimation  testID="repository-card">
         <SwipeableContainer
           ref={swipeableRef}
           rightThreshold={42}

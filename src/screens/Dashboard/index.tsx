@@ -1,5 +1,4 @@
 import { useNavigation } from '@react-navigation/core';
-import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 import { TextInput } from 'react-native';
 
@@ -7,8 +6,7 @@ import { Background } from '../../components/Background';
 import { Card } from '../../components/Card';
 
 import { useRepositories } from '../../hooks/useRepositories';
-import { RepositoriesService } from '../../services/repositories.service';
-import { IRepositorieProps } from '~/Models/repositories-service.model';
+import { runOnJS } from 'react-native-reanimated';
 
 import {
   Container,
@@ -29,12 +27,17 @@ export function Dashboard() {
 
   const { addRepository, repositories } = useRepositories();
 
+	useEffect(() => {
+		'worklet';
+		runOnJS(startApp)();
+	}, []);
+
+	const startApp = () => {
+		navigate('Dashboard');
+	}
+
   function handleAddRepository() {
-    /**
-     * TODO: 
-     * - call addRepository function sending inputText value;
-     * - clean inputText value.
-     */
+    addRepository(inputText);
     inputRef.current?.blur();
   }
 
@@ -61,11 +64,6 @@ export function Dashboard() {
               ref={inputRef}
               placeholder="Digite aqui 'usuário/repositório'"
               value={inputText}
-              /**
-               * TODO - update inputText value when input text value 
-               * changes:
-               * onChangeText={YOUR CODE HERE}
-               */
               onSubmitEditing={handleAddRepository}
               onChangeText={setInputText}
               returnKeyType="send"
@@ -76,11 +74,7 @@ export function Dashboard() {
             <InputButton
               testID="input-button"
               onPress={handleAddRepository}
-            /**
-             * TODO - ensure to disable button when inputText is 
-             * empty (use disabled prop to this):
-             * disabled={CONDITION HERE}
-             */
+             	disabled={inputText === ''}
             >
               <Icon name="search" size={20} />
             </InputButton>

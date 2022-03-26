@@ -19,6 +19,6 @@ export class RepositoriesService implements IRepositoriesService {
 	// @ts-ignore
 	getRepositoryIssues(props: IRepositorieProps): Promise<IGetIssuesResponse> {} 
 	public static async getRepositoryIssues({ repo }: IRepositorieProps): Promise<IGetIssuesResponse> {
-		return await (await api.get(`repos/${repo}/issues`)).data;
+		return await api.get(`/repos/${repo}/issues`);
 	} 
 }
