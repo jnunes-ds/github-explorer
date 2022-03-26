@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/core';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { TextInput } from 'react-native';
 
 import { Background } from '../../components/Background';
@@ -41,16 +41,10 @@ export function Dashboard() {
     inputRef.current?.blur();
   }
 
-  function handleRepositoryPageNavigation(id: number) {
-    /**
-     * TODO - navigate to the Repository screen sending repository id.
-     * Remember to use the correct prop name (repositoryId) to the repositoy id:
-     * 
-     * navigate(SCREEN NAME, {
-     *  repositoryId: id of the repository
-     * })
-     */
-  }
+  const handleRepositoryPageNavigation = useCallback((id: number) => {
+    navigate('Repository', { repositoryId: id })
+  }, [])
+
 
 
   return (

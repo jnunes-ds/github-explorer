@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useRoute } from '@react-navigation/core';
-import { Linking } from 'react-native';
+import { Alert, Linking } from 'react-native';
 import { useRepositories } from '../../hooks/useRepositories';
 
 import { Background } from '../../components/Background';
@@ -26,6 +26,7 @@ import {
 } from './styles';
 import { TitleAnimation } from './TitleAnimation';
 import AppLoading from 'expo-app-loading';
+import { IssueProps } from '../../Models/Repository';
 
 interface RepositoryParams {
   repositoryId: number;
@@ -47,9 +48,20 @@ export function Repository() {
 		}
 	}, [repository]);
 
-  function handleIssueNavigation(issueUrl: string) {
-    // TODO - use Linking to open issueUrl in a browser
-  }
+  const handleIssueNavigation = useCallback(async (issueUrl: number) => {
+		try {
+			const url = `https://github.com/${repository.full_name}/issues/${issueUrl}`;
+			const supported = await Linking.canOpenURL(url);
+
+			if (supported) {
+				await Linking.openURL(url);
+			} else{
+				Alert.alert('Atenção', `Não foi possível abrir a url: ${url}`);
+			}
+		} catch (error) {
+			console.error(error);
+		}
+  }, [Linking, repository])
 
 	if (loading) {
 		return <AppLoading />
@@ -65,7 +77,9 @@ export function Repository() {
             <TitleAnimation>
               {
                 // TODO - full name of the repository
-								repository.full_name
+								repository &&
+								repository?.full_name &&
+								repository?.full_name
 
               }
             </TitleAnimation>
@@ -79,33 +93,43 @@ export function Repository() {
         <RepoStats>
           <Stars>
             <StarsCounter>{
-              // TODO - repository stargazers count
+							repository &&
+							repository.stargazers_count &&
+							repository.stargazers_count
             }</StarsCounter>
             <StarsText>Stars</StarsText>
           </Stars>
 
           <Forks>
             <ForksCounter>{
-              // TODO - repository forks count
+							repository &&
+							repository.forks_count &&
+							repository.forks_count
             }</ForksCounter>
             <ForksText>Forks</ForksText>
           </Forks>
 
           <OpenIssues>
             <OpenIssuesCounter>{
-              // TODO - repository issues count
+							repository &&
+							repository.open_issues_count &&
+							repository.open_issues_count
             }</OpenIssuesCounter>
             <OpenIssuesText>Issues{'\n'}Abertas</OpenIssuesText>
           </OpenIssues>
         </RepoStats>
 
         <IssuesList
-          data={repository.issues}
+          data={
+						repository &&
+						repository.issues &&
+						repository.issues
+					}
           keyExtractor={issue => String(issue.id)}
           showsVerticalScrollIndicator={false}
           renderItem={({ item: issue }) => (
             <Card
-							onPress={() => {}}
+							onPress={(issue: IssueProps) => handleIssueNavigation(issue.id)}
               data={{
                 id: issue.id,
                 title: issue.title,

@@ -19,6 +19,7 @@ import {
   DeleteContainer,
   DeleteIcon,
 } from './styles';
+import { IssueProps } from '~/Models/Repository';
 
 interface CardProps {
 	id: number;
@@ -28,7 +29,7 @@ interface CardProps {
 }
 interface Props {
   data: CardProps;
-  onPress(): void;
+  onPress(arg: number | IssueProps): void | Promise<void>;
 }
 
 export function Card({ data, onPress }: Props) {
@@ -53,15 +54,11 @@ export function Card({ data, onPress }: Props) {
     );
   }, [swipeableRef, removeRepository])
 
-	const handleGoToRepositoryScreen = useCallback(() => {
-		navigate('Repository', { repositoryId: data.id })
-	}, []);
-
   function CardContent() {
     return (
       <CardContainer
         hasImage={!!data.imageUrl}
-        onPress={handleGoToRepositoryScreen}
+        onPress={onPress as never}
       >
         <Info>
           {data.imageUrl && (

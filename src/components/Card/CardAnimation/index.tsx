@@ -22,7 +22,6 @@ export function CardAnimation({ children, ...rest }: CardAnimationProps) {
 	// @ts-ignore
   const animatedStyle = useAnimatedStyle(() => {
     return {
-      // TODO - setup animated style
 			transform: [{ translateX: withTiming(cardOffset.value, {
 				duration: 500,
 				easing: Easing.linear
@@ -32,10 +31,6 @@ export function CardAnimation({ children, ...rest }: CardAnimationProps) {
 	})
 
   useEffect(() => {
-    /**
-     * TODO - setup cardOpacity.value and cardOffset.value with
-     * withTiming()
-     */
 		cardOffset.value = withTiming(0, { duration: 750 });
 		cardOpacity.value = withTiming(1, { duration: 1250 });
   }, []);
