@@ -49,26 +49,6 @@ export function Dashboard() {
      */
   }
 
-  useEffect(() => {
-		const printRepository = async () => {
-			try {
-				const newRequest: IRepositorieProps = {
-					owner: 'facebook',
-					repo: 'react',
-				}
-				const response = await RepositoriesService.getRepositorie(newRequest);
-				if (response) {
-					console.log(':::::DATA:::::', response.data.owner.avatar_url);
-				}
-			} catch (error) {
-				if (axios.isAxiosError(error)) {
-					console.error(error.response?.data);
-				}
-				console.error(error);
-			}
-		}
-		printRepository();
-  }, []);
 
   return (
     <Background>

@@ -1,10 +1,10 @@
 import { AxiosError, AxiosResponse } from "axios";
-import { RepositoryProps } from "./Repository";
+import { IssueProps, RepositoryProps } from "./Repository";
 export interface IOwnerProps {
 	owner: string;
 }
 
-export interface IRepositorieProps extends IOwnerProps {
+export interface IRepositorieProps {
 	repo: string;
 }
 
@@ -15,7 +15,12 @@ export interface RepositoriesResponseProps {
 export interface RepositoryResponseProps {
 	data: RepositoryProps;
 }
+
+export interface IGetIssuesResponse {
+	data: IssueProps[];
+}
 export interface IRepositoriesService {
 	getOwnerRepositories(props: IOwnerProps): Promise<AxiosResponse<RepositoriesResponseProps>>;
-	getRepositorie(props:IRepositorieProps): Promise<RepositoryResponseProps>;
+	getRepository(props:IRepositorieProps): Promise<RepositoryResponseProps>;
+	getRepositoryIssues(props: IRepositorieProps): Promise<IGetIssuesResponse>;
 }

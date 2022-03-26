@@ -1,7 +1,7 @@
 import { api } from "./api";
-import { IRepositoriesService, IOwnerProps, IRepositorieProps, RepositoryResponseProps, RepositoriesResponseProps } from "~/Models/repositories-service.model";
-import { AxiosError, AxiosResponse } from "axios";
-import { RepositoryProps } from "~/Models/Repository";
+import { IRepositoriesService, IOwnerProps, IRepositorieProps, RepositoryResponseProps, RepositoriesResponseProps, IGetIssuesResponse } from "~/Models/repositories-service.model";
+import { AxiosResponse } from "axios";
+import { IssueProps, RepositoryProps } from "~/Models/Repository";
 
 export class RepositoriesService implements IRepositoriesService {
 	// @ts-ignore
@@ -11,8 +11,14 @@ export class RepositoriesService implements IRepositoriesService {
 	}
 
 	// @ts-ignore
-	getRepositorie(props: IRepositorieProps): Promise<AxiosResponse<any>> {}
-	public static async getRepositorie({ owner, repo }: IRepositorieProps): Promise<RepositoryResponseProps>  {
-		return await api.get(`/repos/${owner}/${repo}`);
+	getRepository(props: IRepositorieProps): Promise<RepositoryProps> {}
+	public static async getRepository({ repo }: IRepositorieProps): Promise<RepositoryResponseProps>  {
+		return await api.get(`/repos/${repo}`);
 	}
+
+	// @ts-ignore
+	getRepositoryIssues(props: IRepositorieProps): Promise<IGetIssuesResponse> {} 
+	public static async getRepositoryIssues({ repo }: IRepositorieProps): Promise<IGetIssuesResponse> {
+		return await (await api.get(`repos/${repo}/issues`)).data;
+	} 
 }

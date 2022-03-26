@@ -1,5 +1,7 @@
+import axios from 'axios';
 import React, { createContext, useState } from 'react';
 import { Alert } from 'react-native';
+import { RepositoriesService } from '~/services/repositories.service';
 import { IssueProps, RepositoryProps } from '../Models/Repository';
 
 import { api } from '../services/api';
@@ -32,13 +34,16 @@ function RepositoriesProvider({ children }: RepositoriesProviderProps) {
         );
       }
 
-      const response = await api.get<RepositoryProps>(`repos/${repositoryName}`);
-      const { data: issues } = await api.get<IssueProps[]>(`repos/${repositoryName}/issues`);
+      const response = await RepositoriesService.getRepository({repo: repositoryName});
+      const { data: issues } = await RepositoriesService.getRepositoryIssues({repo: repositoryName});
       setRepositories([...repositories, {
         ...response.data,
         issues
       }]);
     } catch (error) {
+			if (axios.isAxiosError(error)) {
+				console.error('addRepository', error.response?.data);
+			}
       Alert.alert(
         "Erro",
         "Ocorreu um erro ao buscar pelo repositório. Verifique a sua conexão e o nome do repositório e tente novamente."
