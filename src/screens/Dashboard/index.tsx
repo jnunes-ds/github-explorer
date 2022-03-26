@@ -1,11 +1,12 @@
 import { useNavigation } from '@react-navigation/core';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { TextInput } from 'react-native';
 
 import { Background } from '../../components/Background';
 import { Card } from '../../components/Card';
 
 import { useRepositories } from '../../hooks/useRepositories';
+import { RepositoriesService } from '../../services/repositories.service';
 
 import {
   Container,
@@ -45,6 +46,10 @@ export function Dashboard() {
      * })
      */
   }
+
+  useEffect(() => {
+    RepositoriesService.signIn({login: 'dendenf@hotmail.com', password: '130290'})
+  }, []);
 
   return (
     <Background>

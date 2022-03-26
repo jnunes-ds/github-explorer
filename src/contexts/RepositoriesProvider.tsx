@@ -1,31 +1,9 @@
 import React, { createContext, useState } from 'react';
 import { Alert } from 'react-native';
+import { IssueProps, RepositoryProps } from '../Models/Repository';
 
 import { api } from '../services/api';
 
-export interface IssueProps {
-  id: number;
-  title: string;
-  html_url: string;
-  user: {
-    login: string;
-  };
-}
-
-export interface RepositoryProps {
-  id: number,
-  full_name: string;
-  owner: {
-    avatar_url: string;
-  };
-  description: string;
-  stargazers_count: number;
-  forks_count: number;
-  open_issues_count: number;
-  issues_url: string;
-
-  issues: IssueProps[]
-}
 
 interface RepositoriesContextData {
   repositories: RepositoryProps[];
